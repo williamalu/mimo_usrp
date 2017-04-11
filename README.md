@@ -20,6 +20,13 @@ apt-get install libuhd-dev libuhd003 uhd-host
 cd /usr/lib/uhd/utils/
 ./uhd_images_downloader.py
 ```
+The resulting output should look something like this:
+```
+Images destination:      /usr/share/uhd/images
+Downloading images from: http://files.ettus.com/binaries/images/uhd-images_003.009.002-release.zip
+Downloading images to:   /tmp/tmpvosGlF/uhd-images_003.009.002-release.zip
+26296 kB / 26296 kB (100%)
+```
 
 4. Plug the B210 USRP into your computer via USB and check whether or not your computer has properly detected the USRP.
 ```
