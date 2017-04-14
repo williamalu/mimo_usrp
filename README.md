@@ -12,6 +12,8 @@ apt-get install gnuradio
 
 2. Install Ettus' hardware drivers.
 ```
+add-apt-repository ppa:ettusresearch/uhd
+apt-get update
 apt-get install libuhd-dev libuhd003 uhd-host
 ```
 
