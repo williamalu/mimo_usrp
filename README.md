@@ -49,6 +49,8 @@ Device Address:
     product: B210
 ```
 
+5. If you need more debugging steps, [this thread](http://stackoverflow.com/questions/33304828/when-trying-to-use-my-usrp-in-gnu-radio-i-get-a-no-devices-found-for) on StackOverflow is very helpful.
+
 ## Team Members
 - [Shane Kelly](https://github.com/shanek21)
 - [Franton Lin](https://github.com/frantonlin)
