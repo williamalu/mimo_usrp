@@ -62,7 +62,8 @@ class DataFormatter(object):
         formatted_data = np.array(formatted_data, dtype=np.complex64)
 
         # Print final formatted_data
-        print formatted_data
+        print( formatted_data )
+        print( len(formatted_data) )
 
         # Write formatted_data to output_file
         output_file = open(self.output_filename, 'wb')
@@ -75,8 +76,9 @@ if __name__ == '__main__':
     input_filename = 'raw_data.bin'
     output_filename = 'formatted_data.bin'
     amplitude = 5.0 # Voltage scaling
-    pulse = np.array([0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0]) # Shape, currently a box
-    T = 10
+    #pulse = np.array([0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0]) # Shape, currently a box
+    pulse = np.ones(100)
+    T = 200
     start_sequence = [1, 1, 1, 1, 1, 1, 1, 1] # Goes at beginning of data
     stop_sequence = [-1, -1, -1, -1, -1, -1, -1, -1] # Goes at end of data
     filler_sequence = [0] # Goes between each pulse of data
