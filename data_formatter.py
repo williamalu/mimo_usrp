@@ -98,3 +98,4 @@ if __name__ == '__main__':
                 pulse_width, start_sequence, stop_sequence, filler_sequence)
     data_formatter.generate_data()
     data_formatter.format_data()
+    
