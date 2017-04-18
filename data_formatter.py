@@ -38,6 +38,16 @@ class DataFormatter(object):
         self.data = map(int, list(input_string)[:-1])
 
 
+    def generate_data(self, data_length=1000):
+        """ Generates random binary data with a specified length. """
+        
+        # Generate array of random binary
+        data = np.random.randint(2, size=data_length)
+        
+        # Store data as member variable 
+        self.data = data
+        
+
     def format_data(self):
         """ Reformat data to output_filename. """
 
@@ -86,6 +96,6 @@ if __name__ == '__main__':
     # Make DataFormatter object
     data_formatter = DataFormatter(input_filename, output_filename, amplitude,
             pulse_width, start_sequence, stop_sequence, filler_sequence)
-    data_formatter.read_data()
+    data_formatter.generate_data()
     data_formatter.format_data()
 
