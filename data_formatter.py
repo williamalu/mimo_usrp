@@ -21,9 +21,10 @@ class DataFormatter(object):
         self.start_sequence = start_sequence
         self.stop_sequence = stop_sequence
         self.data = None
+        self.formatted_data = None
 
 
-    def generate_data(self, data_length=1000):
+    def generate_data(self, data_length=20):
         """ Generates random binary data with a specified length. """
         
         # Generate array of random binary
@@ -38,7 +39,7 @@ class DataFormatter(object):
         """ Reformat data to output_filename. """
 
         # Initialize the formatted data
-        formatted_data = np.array([], dtype=np.complex64)
+        self.formatted_data = np.array([], dtype=np.complex64)
 
         # Concatenate the start and stop sequences to self.data
         self.data = self.amplitude * np.concatenate( (self.start_sequence,
@@ -46,18 +47,27 @@ class DataFormatter(object):
                                                       self.stop_sequence) )
 
         # Widen by T
-        self.widen = np.zeros(len(self.data) * self.T)
+        self.widen = np.zeros(len(self.data) * self.T, dtype=np.complex64)
         for index, value in enumerate(self.widen):
             if index % self.T == 0:
                 self.widen[index] = self.data[ index//self.T ]
 
         # Convolve impulses with pulse shape
-        formatted_data = np.convolve(self.widen, self.pulse)
-        formatted_data = np.array(formatted_data, dtype=np.complex64)
+        self.formatted_data = np.convolve(self.widen, self.pulse)
+        self.formatted_data = np.array(self.formatted_data, dtype=np.complex64)
 
         # Write formatted_data to output_file
         output_file = open(self.output_filename, 'wb')
-        output_file.write(formatted_data.tobytes())
+        output_file.write(self.formatted_data.tobytes())
+
+
+    def visualize_data(self):
+        import matplotlib.pyplot as plt
+        print(self.formatted_data)
+        plt.plot(self.formatted_data.real)
+        plt.plot(self.formatted_data.imag)
+        #plt.scatter(self.formatted_data.real, self.formatted_data.imag, s=2)
+        plt.show()
             
 
 if __name__ == '__main__':
@@ -75,4 +85,5 @@ if __name__ == '__main__':
                 pulse, T, start_sequence, stop_sequence)
     data_formatter.generate_data()
     data_formatter.format_data()
+    data_formatter.visualize_data()
     
