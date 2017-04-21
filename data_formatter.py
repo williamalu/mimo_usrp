@@ -64,8 +64,9 @@ class DataFormatter(object):
     def visualize_data(self):
         import matplotlib.pyplot as plt
         print(self.formatted_data)
-        plt.plot(self.formatted_data.real)
-        plt.plot(self.formatted_data.imag)
+        plt.plot(self.formatted_data.real, label="Real")
+        plt.plot(self.formatted_data.imag, label="Imaginary")
+        plt.legend()
         #plt.scatter(self.formatted_data.real, self.formatted_data.imag, s=2)
         plt.show()
             
