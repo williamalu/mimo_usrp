@@ -105,7 +105,7 @@
     </param>
     <param>
       <key>value</key>
-      <value>250000</value>
+      <value>500000</value>
     </param>
   </block>
   <block>
@@ -128,11 +128,11 @@
     </param>
     <param>
       <key>_enabled</key>
-      <value>0</value>
+      <value>1</value>
     </param>
     <param>
       <key>file</key>
-      <value>/Users/frantonlin/Google Drive/Olin_v3/ADC/temp_mimo_usrp/test.dat</value>
+      <value>/Users/frantonlin/Google Drive/Olin_v3/ADC/temp_mimo_usrp/received.bin</value>
     </param>
     <param>
       <key>_coordinate</key>
@@ -554,7 +554,7 @@
     </param>
     <param>
       <key>gain0</key>
-      <value>20</value>
+      <value>25</value>
     </param>
     <param>
       <key>lo_export0</key>

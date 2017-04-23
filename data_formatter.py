@@ -75,9 +75,9 @@ if __name__ == '__main__':
 
     # Define parameters for data formatting
     output_filename = 'formatted_data.bin'
-    amplitude = 5.0 # Voltage scaling
+    amplitude = 0.5 # Voltage scaling
     pulse = np.ones(100)
-    T = 200
+    T = 400
     start_sequence = [1, 1, 1, 1, 1, 1, 1, 1] # Goes at beginning of data
     stop_sequence = [-1, -1, -1, -1, -1, -1, -1, -1] # Goes at end of data
 
