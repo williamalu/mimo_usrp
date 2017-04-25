@@ -18,8 +18,8 @@ class DataFormatter(object):
         self.amplitude = amplitude
         self.pulse = pulse
         self.T = T
-        self.start_sequence = start_sequence
-        self.stop_sequence = stop_sequence
+        self.start_sequence = np.array(start_sequence)
+        self.stop_sequence = np.array(stop_sequence)
         self.data = None
         self.formatted_data = None
 
@@ -29,10 +29,12 @@ class DataFormatter(object):
         
         # Generate array of random binary
         np.random.seed(10)
-        data = np.random.choice([1, -1], size=data_length)
-        
-        # Store data as member variable 
-        self.data = data
+        data = np.array(np.random.choice([1, 0], size=data_length))
+
+        # Store data
+        self.data = np.concatenate( [self.start_sequence, data, self.stop_sequence] )
+
+        np.savetxt("data_in_binary.txt", self.data)
         
 
     def format_data(self):
@@ -40,11 +42,12 @@ class DataFormatter(object):
 
         # Initialize the formatted data
         self.formatted_data = np.array([], dtype=np.complex64)
+    
+        # Change 0s to -1s
+        self.data[ self.data==0 ] = -1
 
-        # Concatenate the start and stop sequences to self.data
-        self.data = self.amplitude * np.concatenate( (self.start_sequence,
-                                                      self.data, 
-                                                      self.stop_sequence) )
+        # Scale
+        self.data = self.amplitude * self.data
 
         # Widen by T
         self.widen = np.zeros(len(self.data) * self.T, dtype=np.complex64)
@@ -59,6 +62,7 @@ class DataFormatter(object):
         # Write formatted_data to output_file
         output_file = open(self.output_filename, 'wb')
         output_file.write(self.formatted_data.tobytes())
+        output_file.close()
 
 
     def visualize_data(self):
@@ -79,7 +83,7 @@ if __name__ == '__main__':
     pulse = np.ones(100)
     T = 400
     start_sequence = [1, 1, 1, 1, 1, 1, 1, 1] # Goes at beginning of data
-    stop_sequence = [-1, -1, -1, -1, -1, -1, -1, -1] # Goes at end of data
+    stop_sequence =  [0, 0, 0, 0, 0, 0, 0, 0] # Goes at end of data
 
     # Make DataFormatter object
     data_formatter = DataFormatter(output_filename, amplitude,

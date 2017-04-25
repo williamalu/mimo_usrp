@@ -17,6 +17,8 @@ class Decoder(object):
         self.phase_offset = None
         self.data_fixed = None
 
+        self.samples = None
+
 
     def read_file(self):
         self.data_raw = np.fromfile(self.filename, dtype=np.complex64)
@@ -51,9 +53,40 @@ class Decoder(object):
 
     def plot_data(self):
         plt.figure()
-        plt.plot(self.data_fixed.real, label='real')
-        plt.plot(self.data_fixed.imag, label='imag')
+        plt.plot(self.data_fixed.real, '.', label='real')
+        plt.plot(self.data_fixed.imag, '.', label='imag')
         plt.show()
+
+    
+    def sample_data(self, T):
+        oldval = None
+        start_index = None
+        for i, val in enumerate(self.data_fixed):
+            if i == 0:
+                oldval = val
+                continue
+
+            if (val - oldval) > 0.0025:
+                start_index = i
+                break
+
+        samples = []
+        for i in range(i, len(self.data_fixed), T):
+            data = self.data_fixed[i].real
+
+            if data > 0:
+                samples.append(1)
+            else:
+                samples.append(0)
+
+        self.samples = np.array(samples[:36])
+
+    
+    def is_data_correct(self):
+        true_data = np.loadtxt('data_in_binary.txt')
+
+        errors = true_data - self.samples
+        print( np.count_nonzero(errors) )
 
 
 if __name__ == "__main__":
@@ -63,4 +96,7 @@ if __name__ == "__main__":
     decoder.read_file()
     decoder.find_offsets_bpsk()
     decoder.fix_offsets()
-    decoder.plot_data()
+    #decoder.plot_data()
+
+    samples = decoder.sample_data(200)
+    decoder.is_data_correct()
