@@ -10,10 +10,11 @@ import numpy as np
 
 class DataFormatter(object):
 
-    def __init__(self, output_filename, amplitude,
+    def __init__(self, data_path, output_filename, amplitude,
             pulse, T, start_sequence=[], stop_sequence=[]):
         """ Initialize the data formatter. """
 
+        self.data_path = data_path
         self.output_filename = output_filename
         self.amplitude = amplitude
         self.pulse = pulse
@@ -32,9 +33,10 @@ class DataFormatter(object):
         data = np.array(np.random.choice([1, 0], size=data_length))
 
         # Store data
-        self.data = np.concatenate( [self.start_sequence, data, self.stop_sequence] )
+        self.data = np.concatenate( [self.start_sequence, data,
+                self.stop_sequence] )
 
-        np.savetxt("data_in_binary.txt", self.data)
+        np.savetxt(data_path + 'data_in_binary.txt', self.data)
         
 
     def format_data(self):
@@ -60,7 +62,8 @@ class DataFormatter(object):
         self.formatted_data = np.array(self.formatted_data, dtype=np.complex64)
 
         # Write formatted_data to output_file
-        output_file = open(self.output_filename, 'wb')
+        output_file_path = self.data_path + self.output_filename
+        output_file = open(output_file_path, 'wb')
         output_file.write(self.formatted_data.tobytes())
         output_file.close()
 
@@ -78,6 +81,7 @@ class DataFormatter(object):
 if __name__ == '__main__':
 
     # Define parameters for data formatting
+    data_path = '../data/'
     output_filename = 'formatted_data.bin'
     amplitude = 0.5 # Voltage scaling
     pulse = np.ones(100)
@@ -86,7 +90,7 @@ if __name__ == '__main__':
     stop_sequence =  [0, 0, 0, 0, 0, 0, 0, 0] # Goes at end of data
 
     # Make DataFormatter object
-    data_formatter = DataFormatter(output_filename, amplitude,
+    data_formatter = DataFormatter(data_path, output_filename, amplitude,
                 pulse, T, start_sequence, stop_sequence)
     data_formatter.generate_data()
     data_formatter.format_data()

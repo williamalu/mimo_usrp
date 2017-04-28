@@ -110,8 +110,9 @@ class PLL(object):
 
 if __name__ == "__main__":
 
+    data_path = '../data/'
     input_filename = 'received_data_1.bin'
-    decoder = Decoder(input_filename)
+    decoder = Decoder(data_path, input_filename)
     decoder.read_file()
     decoder.find_offsets_bpsk()
     decoder.fix_offsets()

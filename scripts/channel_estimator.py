@@ -14,7 +14,8 @@ if __name__ == "__main__":
     channel1 = np.array( channel1, dtype=np.complex64 )
     channel2 = np.array( channel2, dtype=np.complex64 )
 
-    channel1.tofile("channel1_H_estimator.bin")
-    channel2.tofile("channel2_H_estimator.bin")
+    data_path = '../data/'
+    channel1.tofile(data_path + "channel1_H_estimator.bin")
+    channel2.tofile(data_path + "channel2_H_estimator.bin")
 
     
