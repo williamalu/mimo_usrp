@@ -8,6 +8,7 @@ phase offset. """
 import numpy as np
 import matplotlib.pyplot as plt
 
+import helper
 from decoder import Decoder
 
 
@@ -35,6 +36,9 @@ class PLL(object):
         err = 0
         err_sum = 0
 
+        self.data_fixed = np.array([])
+
+        self.abs_val_list = np.array([])
         self.err_list = np.array([])
         self.phase_list = np.array([])
 
@@ -42,12 +46,15 @@ class PLL(object):
 
             # Multiply input value by complex exponential of specified phase
             y = x * np.exp(phase * j)
+            self.data_fixed = np.append(self.data_fixed, y)
 
-            # Estimate error in phase
-            A = y.real * np.sign(y.imag)
-            B = y.imag * np.sign(y.real)
-            err = (-1/2) * (A - B)
-            self.err_list = np.append(self.err_list, err)
+            # Estimate error in phase for BPSK
+            err = -y.real * y.imag if (np.absolute(x) > .004) else 0.0
+
+            # Estimate error in phase for QPSK
+            # A = y.real * np.sign(y.imag)
+            # B = y.imag * np.sign(y.real)
+            # err = (-1/2) * (A - B)
 
             # Calculate integral of error
             err_sum += err
@@ -56,25 +63,27 @@ class PLL(object):
             err_diff = err - prev_err
 
             # Use PID control to find the phase offset for the next step
-            phase = self.k_p * err + self.k_i * err_sum + self.k_d * err_diff
-            self.phase_list = np.append(self.phase_list, phase)
-            # print 'Phase: ', phase
+            phase += self.k_p * err + self.k_i * err_sum + self.k_d * err_diff
+            phase = helper.wrap_radian(phase)
 
             # Define error in previous step
             prev_err = err
 
-        # Correct for the estimated phase offset
-        self.data_fixed = self.data * np.exp(phase * j)
+            # Track data for plottting
+            self.err_list = np.append(self.err_list, err)
+            self.abs_val_list = np.append(self.abs_val_list, np.absolute(x))
+            self.phase_list = np.append(self.phase_list, phase)
 
 
     def plot_data(self):
-        """ Plot the phase corrected data. """
+        """ Visualize! """
 
+        # Original data and corrected data
         plt.figure()
         plt.subplot(2, 1, 1)
         plt.plot(self.data.real, linewidth=2.0, label='real')
         plt.plot(self.data.imag, 'r-', linewidth=2.0, label='imag')
-        plt.plot(self.err_list, label='err')
+        # plt.plot(self.err_list, label='err')
         plt.title('Data')
         plt.legend()
         plt.subplot(2, 1, 2)
@@ -83,6 +92,7 @@ class PLL(object):
         plt.title('Data with phase correction')
         plt.legend()
 
+        # Phase and error
         plt.figure()
         plt.subplot(2, 1, 1)
         plt.plot(self.phase_list)
@@ -90,6 +100,11 @@ class PLL(object):
         plt.subplot(2, 1, 2)
         plt.plot(self.err_list)
         plt.title('Error Over Time')
+
+        # Absolute value
+        plt.figure()
+        plt.plot(self.abs_val_list)
+        plt.title('Absolute Value Over Time')
         plt.show()
 
 
@@ -101,9 +116,9 @@ if __name__ == "__main__":
     decoder.find_offsets_bpsk()
     decoder.fix_offsets()
 
-    k_p = 1.0
-    k_i = 0.75
-    k_d = 1.0
+    k_p = 0.7
+    k_i = 0.1
+    k_d = 0.0
     pll = PLL(decoder.data_fixed, k_p, k_i, k_d)
     pll.correct_phase_offset()
     pll.plot_data()
