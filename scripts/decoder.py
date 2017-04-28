@@ -4,13 +4,19 @@
 """ Class that reads in received data from a specified file, and plots
 and decodes the data. """
 
+
 import numpy as np
 import matplotlib.pyplot as plt
 
+
 j = (0 + 1j)
 
+
 class Decoder(object):
-    def __init__(self, filename):
+
+    def __init__(self, data_path, filename):
+
+        self.data_path = data_path
         self.filename = filename
         self.data_raw = None
         self.frequency_offset = None
@@ -21,10 +27,13 @@ class Decoder(object):
 
 
     def read_file(self):
-        self.data_raw = np.fromfile(self.filename, dtype=np.complex64)
+
+        file_path = data_path + self.filename
+        self.data_raw = np.fromfile(file_path, dtype=np.complex64)
 
 
     def find_offsets_bpsk(self):
+
         # Take the normalized data
         normalized_data = self.data_raw / np.linalg.norm(self.data_raw)
         squared_data = np.square( normalized_data )
@@ -44,14 +53,17 @@ class Decoder(object):
 
 
     def fix_offsets(self):
+
         data_fixed = np.zeros(len(self.data_raw), dtype=np.complex64)
         for i, val in enumerate(self.data_raw):
-            data_fixed[i] = val * np.exp(-j * self.frequency_offset * i) / self.phase_offset
+            data_fixed[i] = val * np.exp(-j * self.frequency_offset * i) / \
+                    self.phase_offset
 
         self.data_fixed = np.array(data_fixed, dtype=np.complex64)
 
 
     def plot_data(self):
+
         plt.figure()
         plt.plot(self.data_fixed.real, '.', label='real')
         plt.plot(self.data_fixed.imag, '.', label='imag')
@@ -90,9 +102,11 @@ class Decoder(object):
 
 
 if __name__ == "__main__":
+
+    data_path = '../data/'
     input_filename = 'received_data_1.bin'
 
-    decoder = Decoder(input_filename)
+    decoder = Decoder(data_path, input_filename)
     decoder.read_file()
     decoder.find_offsets_bpsk()
     decoder.fix_offsets()
