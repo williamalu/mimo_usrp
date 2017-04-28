@@ -32,7 +32,8 @@ class DataFormatter(object):
         data = np.array(np.random.choice([1, 0], size=data_length))
 
         # Store data
-        self.data = np.concatenate( [self.start_sequence, data, self.stop_sequence] )
+        self.data = np.concatenate( [self.start_sequence, data,
+                self.stop_sequence] )
 
         np.savetxt("data_in_binary.txt", self.data)
         
