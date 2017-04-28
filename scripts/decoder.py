@@ -14,8 +14,9 @@ j = (0 + 1j)
 
 class Decoder(object):
 
-    def __init__(self, filename):
+    def __init__(self, data_path, filename):
 
+        self.data_path = data_path
         self.filename = filename
         self.data_raw = None
         self.frequency_offset = None
@@ -27,7 +28,8 @@ class Decoder(object):
 
     def read_file(self):
 
-        self.data_raw = np.fromfile(self.filename, dtype=np.complex64)
+        file_path = data_path + self.filename
+        self.data_raw = np.fromfile(file_path, dtype=np.complex64)
 
 
     def find_offsets_bpsk(self):
@@ -101,9 +103,10 @@ class Decoder(object):
 
 if __name__ == "__main__":
 
+    data_path = '../data/'
     input_filename = 'received_data_1.bin'
 
-    decoder = Decoder(input_filename)
+    decoder = Decoder(data_path, input_filename)
     decoder.read_file()
     decoder.find_offsets_bpsk()
     decoder.fix_offsets()
