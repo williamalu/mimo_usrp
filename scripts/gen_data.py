@@ -36,7 +36,7 @@ class DataFormatter(object):
         self.data = np.concatenate( [self.start_sequence, data,
                 self.stop_sequence] )
 
-        np.savetxt(data_path + 'data_in_binary.txt', self.data)
+        np.savetxt(data_path + 'data_1.txt', self.data)
         
 
     def format_data(self):
