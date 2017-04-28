@@ -1,8 +1,13 @@
 import numpy as np
 
 if __name__ == "__main__":
+    np.random.seed(45)
+
     noise1 = np.random.randn(50000);
     noise2 = np.random.randn(50000);
+
+    noise1.tofile("noise1.bin")
+    noise2.tofile("noise2.bin")
 
     zeros_gap = np.zeros(10000);
 
@@ -14,7 +19,7 @@ if __name__ == "__main__":
     channel1 = np.array( channel1, dtype=np.complex64 )
     channel2 = np.array( channel2, dtype=np.complex64 )
 
-    channel1.tofile("channel1_H_estimator.bin")
-    channel2.tofile("channel2_H_estimator.bin")
+    channel1.tofile("noise_transmitter_1.bin")
+    channel2.tofile("noise_transmitter_2.bin")
 
     
