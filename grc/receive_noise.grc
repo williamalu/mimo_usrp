@@ -105,7 +105,7 @@
     </param>
     <param>
       <key>value</key>
-      <value>500000</value>
+      <value>250e3</value>
     </param>
   </block>
   <block>
@@ -132,7 +132,7 @@
     </param>
     <param>
       <key>file</key>
-      <value>/Users/frantonlin/Google Drive/Olin_v3/ADC/mimo_usrp/received1.bin</value>
+      <value>/Users/frantonlin/Google Drive/Olin_v3/ADC/mimo_usrp/noise_received_1.bin</value>
     </param>
     <param>
       <key>_coordinate</key>
@@ -183,7 +183,7 @@
     </param>
     <param>
       <key>file</key>
-      <value>/Users/frantonlin/Google Drive/Olin_v3/ADC/mimo_usrp/received2.bin</value>
+      <value>/Users/frantonlin/Google Drive/Olin_v3/ADC/mimo_usrp/noise_received_2.bin</value>
     </param>
     <param>
       <key>_coordinate</key>
