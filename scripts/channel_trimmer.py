@@ -11,7 +11,7 @@ class Trimmer(object):
     data_path = "../data/"
 
     @staticmethod
-    def trim_both(fname, noise_length=50000, gap=10000, offset=3):
+    def trim_both(fname, output_name, noise_length=50000, gap=10000, offset=3):
         """ Writes two files that each contain one of the two trimmed blocks
             of received noise
 
@@ -52,11 +52,11 @@ class Trimmer(object):
         plt.title("SECOND")
         plt.show()
 
-        Trimmer.write_trimmed(fname, received[beg1:end1], received[beg2:end2])
+        Trimmer.write_trimmed(output_name, received[beg1:end1], received[beg2:end2])
 
 
     @staticmethod
-    def write_trimmed(fname, first, second):
+    def write_trimmed(output_name, first, second):
         """ Writes two binary complex64 files
 
             Parametersc
@@ -68,14 +68,15 @@ class Trimmer(object):
             second : ndarray
                 the second complex array to write to a file
         """
-        output_file = open(Trimmer.data_path+"trimmed_"+fname+"_1.bin", 'wb')
+        output_file = open(Trimmer.data_path+output_name+"1.bin", 'wb')
         output_file.write(first.tobytes())
         output_file.close()
-        output_file = open(Trimmer.data_path+"trimmed_"+fname+"_2.bin", 'wb')
+        output_file = open(Trimmer.data_path+output_name+"2.bin", 'wb')
         output_file.write(second.tobytes())
         output_file.close()
 
 
 if __name__ == "__main__":
-    Trimmer.trim_both("recnoise1")
-    Trimmer.trim_both("recnoise2", offset=1)
+    Trimmer.trim_both("noise_received_1", output_name="channel_1")
+    Trimmer.trim_both("noise_received_2", offset=1, output_name="channel_2")
+

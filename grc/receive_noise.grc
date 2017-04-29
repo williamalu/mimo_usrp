@@ -132,7 +132,7 @@
     </param>
     <param>
       <key>file</key>
-      <value>/Users/frantonlin/Google Drive/Olin_v3/ADC/mimo_usrp/noise_received_1.bin</value>
+      <value>/home/byron/Documents/School/AnalDig/mimo_usrp/data/noise_received_1.bin</value>
     </param>
     <param>
       <key>_coordinate</key>
@@ -183,7 +183,7 @@
     </param>
     <param>
       <key>file</key>
-      <value>/Users/frantonlin/Google Drive/Olin_v3/ADC/mimo_usrp/noise_received_2.bin</value>
+      <value>/home/byron/Documents/School/AnalDig/mimo_usrp/data/noise_received_2.bin</value>
     </param>
     <param>
       <key>_coordinate</key>
