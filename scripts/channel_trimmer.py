@@ -1,27 +1,81 @@
-# script for trimming received noise files to estimate H
+#!/usr/bin/env python
+
+""" Class for creating trimmed received noise files to estimate H
+"""
 
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib
 
-matplotlib.rcParams['agg.path.chunksize'] = 10000
+class Trimmer(object):
+    data_path = "../data/"
 
-data_path = '../data/'
+    @staticmethod
+    def trim_both(fname, noise_length=50000, gap=10000, offset=3):
+        """ Writes two files that each contain one of the two trimmed blocks
+            of received noise
 
-data1 = np.fromfile(data_path + 'received1.bin', dtype=np.complex64)
-data2 = np.fromfile(data_path + 'received2.bin', dtype=np.complex64)
+            Parameters
+            ----------
+            fname : str
+                name of the binary file to be trimmed, without file extension
+            noise_length : int
+                length of the noise block, in number of samples
+            gap : int
+                length of the gap between noise blocks, in number of samples
+            offset : int
+                number of samples used to accurately tune finding the blocks
+        """
 
-data1 = data1[int(2.974e6):int(3.086e6)]
-data2 = data2[int(2.974e6):int(3.086e6)]
+        received = np.fromfile(Trimmer.data_path+fname+".bin",
+            dtype=np.complex64)
+        rec_length = range(len(received))
+        rec_ampl = np.absolute(received)
+        noise_ampl = np.amax(rec_ampl[:500000])
 
-# plt.plot(data2[int(2.974e6):int(3.086e6)].real,label="real")
-# plt.plot(data2[int(2.974e6):int(3.086e6)].imag,label="imag")
-# plt.show()
+        beg1 = np.argmax(rec_ampl>2*noise_ampl)-offset
+        end1 = beg1 + noise_length
+        beg2 = end1 + gap
+        end2 = beg2 + noise_length
 
-output_file = open(data_path + 'received1_trimmed.bin', 'wb')
-output_file.write(data1.tobytes())
-output_file.close()
+        plt.subplot(2,1,1)
+        plt.plot(rec_length[beg1-gap:end1+gap], rec_ampl[beg1-gap:end1+gap],
+            '.', ms=2, label="received")
+        plt.plot(rec_length[beg1:end1], rec_ampl[beg1:end1],
+            '.', ms=2, label="first")
+        plt.title("FIRST")
+        plt.subplot(2,1,2)
+        plt.plot(rec_length[beg2-gap:end2+gap], rec_ampl[beg2-gap:end2+gap],
+            '.', ms=2, label="received")
+        plt.plot(rec_length[beg2:end2], rec_ampl[beg2:end2],
+            '.', ms=2, label="second")
+        plt.title("SECOND")
+        plt.show()
 
-output_file = open(data_path + 'received2_trimmed.bin', 'wb')
-output_file.write(data2.tobytes())
-output_file.close()
+        Trimmer.write_trimmed(fname, received[beg1:end1], received[beg2:end2])
+
+
+    @staticmethod
+    def write_trimmed(fname, first, second):
+        """ Writes two binary complex64 files
+
+            Parametersc
+            ----------
+            fname : str
+                base name of the file to write
+            first : ndarray
+                the first complex array to write to a file
+            second : ndarray
+                the second complex array to write to a file
+        """
+        output_file = open(Trimmer.data_path+"trimmed_"+fname+"_1.bin", 'wb')
+        output_file.write(first.tobytes())
+        output_file.close()
+        output_file = open(Trimmer.data_path+"trimmed_"+fname+"_2.bin", 'wb')
+        output_file.write(second.tobytes())
+        output_file.close()
+
+
+if __name__ == "__main__":
+    Trimmer.trim_both("recnoise1")
+    Trimmer.trim_both("recnoise2", offset=1)
