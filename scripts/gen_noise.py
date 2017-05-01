@@ -1,4 +1,5 @@
 import numpy as np
+import matplotlib.pyplot as plt
 
 if __name__ == "__main__":
     data_path = '../data/'
@@ -12,7 +13,7 @@ if __name__ == "__main__":
 
     zeros_gap = np.zeros(10000);
 
-    zeros = np.zeros(50000);
+    zeros = np.zeros(len(noise1));
 
     channel1 = np.concatenate( [noise1, zeros_gap, zeros] )
     channel2 = np.concatenate( [zeros, zeros_gap, noise2] )
@@ -24,3 +25,6 @@ if __name__ == "__main__":
     channel2.tofile(data_path + "noise_2_transmit.bin")
 
     
+    plt.plot(channel1)
+    plt.plot(channel2)
+    plt.show()
