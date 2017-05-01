@@ -28,7 +28,7 @@ class Decoder(object):
 
     def read_file(self):
 
-        file_path = data_path + self.filename
+        file_path = self.data_path + self.filename
         self.data_raw = np.fromfile(file_path, dtype=np.complex64)
 
 
@@ -104,7 +104,7 @@ class Decoder(object):
 if __name__ == "__main__":
 
     data_path = '../data/'
-    input_filename = 'received_data_1.bin'
+    input_filename = 'send_1.bin'
 
     decoder = Decoder(data_path, input_filename)
     decoder.read_file()
