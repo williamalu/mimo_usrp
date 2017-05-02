@@ -10,21 +10,22 @@ import numpy as np
 
 class DataFormatter(object):
 
-    def __init__(self, data_path, mimo_count, V_vector, amplitude,
+    def __init__(self, data_path, V_matrix, amplitude,
             pulse, T, seed, start_sequence=[], stop_sequence=[]):
         """ Initialize the data formatter. """
 
         self.data_path = data_path
-        self.mimo_count = mimo_count
-        self.V_vector = V_vector
+        self.V_matrix = V_matrix
         self.amplitude = amplitude
         self.pulse = pulse
         self.T = T
         self.start_sequence = np.array(start_sequence)
         self.stop_sequence = np.array(stop_sequence)
         self.seed = seed
-        self.data = None
-        self.formatted_data = None
+        self.data1 = None
+        self.data2 = None
+        self.transmit_data1 = None
+        self.transmit_data2 = None
 
 
     def generate_data(self, data_length=20):
@@ -32,54 +33,79 @@ class DataFormatter(object):
         
         # Generate array of random binary
         np.random.seed(self.seed)
-        data = np.array(np.random.choice([1, 0], size=data_length))
+        data1 = np.array(np.random.choice([1, 0], size=data_length))
+        data2 = np.array(np.random.choice([1, 0], size=data_length))
 
         # Store data
-        self.data = np.concatenate( [self.start_sequence, data,
+        self.data1 = np.concatenate( [self.start_sequence, data1,
                 self.stop_sequence] )
 
-        np.savetxt(data_path + 'data_'+str(self.mimo_count)+'.txt', self.data)
+        self.data2 = np.concatenate( [self.start_sequence, data2,
+                self.stop_sequence] )
+
+        np.savetxt(data_path + 'data_1.txt', self.data1)
+        np.savetxt(data_path + 'data_2.txt', self.data2)
         
 
     def format_data(self):
         """ Reformat data to output_filename. """
 
         # Initialize the formatted data
-        self.formatted_data = np.array([], dtype=np.complex64)
+        self.transmit_data1 = np.array([], dtype=np.complex64)
+        self.transmit_data2 = np.array([], dtype=np.complex64)
     
         # Change 0s to -1s
-        self.data[ self.data==0 ] = -1
+        self.data1[ self.data1==0 ] = -1
+        self.data2[ self.data2==0 ] = -1
 
         # Scale
-        self.data = self.amplitude * self.data
+        self.data1 = self.amplitude * self.data1
+        self.data2 = self.amplitude * self.data2
 
         # Widen by T
-        self.widen = np.zeros(len(self.data) * self.T, dtype=np.complex64)
-        for index, value in enumerate(self.widen):
+        self.widen1 = np.zeros(len(self.data1) * self.T, dtype=np.complex64)
+        for index, value in enumerate(self.widen1):
             if index % self.T == 0:
-                self.widen[index] = self.data[ index//self.T ]
+                self.widen1[index] = self.data1[ index//self.T ]
+
+        self.widen2 = np.zeros(len(self.data2) * self.T, dtype=np.complex64)
+        for index, value in enumerate(self.widen2):
+            if index % self.T == 0:
+                self.widen2[index] = self.data2[ index//self.T ]
 
         # Convolve impulses with pulse shape
-        self.formatted_data = np.convolve(self.widen, self.pulse)
-        self.formatted_data = np.array(self.formatted_data, dtype=np.complex64)
+        self.transmit_data1 = np.convolve(self.widen1, self.pulse)
+        self.transmit_data1 = np.array(self.transmit_data1, dtype=np.complex64)
+
+        self.transmit_data2 = np.convolve(self.widen2, self.pulse)
+        self.transmit_data2 = np.array(self.transmit_data2, dtype=np.complex64)
 
         # Multiply by respective V-vector value for MIMO
-        self.formatted_data = self.V_vector[self.mimo_count-1] * self.formatted_data
+        for i, val in enumerate(self.transmit_data1):
+            vec = np.matrix( [ [val], [self.transmit_data2[i]] ] )
+            out = self.V_matrix * vec
+
+            self.transmit_data1[i] = out[0]
+            self.transmit_data2[i] = out[1]
 
         # Write formatted_data to output_file
-        output_file_path = self.data_path + 'send_'+str(self.mimo_count)+'.bin'
-        output_file = open(output_file_path, 'wb')
-        output_file.write(self.formatted_data.tobytes())
-        output_file.close()
+        self.transmit_data1.tofile(self.data_path + 'send_1.bin')
+        self.transmit_data2.tofile(self.data_path + 'send_2.bin')
 
 
     def visualize_data(self):
         import matplotlib.pyplot as plt
-        print(self.formatted_data)
-        plt.plot(self.formatted_data.real, label="Real")
-        plt.plot(self.formatted_data.imag, label="Imaginary")
+        plt.plot(self.transmit_data1.real, label="Real")
+        plt.plot(self.transmit_data1.imag, label="Imaginary")
         plt.legend()
-        #plt.scatter(self.formatted_data.real, self.formatted_data.imag, s=2)
+        plt.title("data 1")
+
+        plt.figure()
+        plt.plot(self.transmit_data2.real, label="Real")
+        plt.plot(self.transmit_data2.imag, label="Imaginary")
+        plt.legend()
+        plt.title("data 2")
+
         plt.show()
             
 
@@ -93,20 +119,12 @@ if __name__ == '__main__':
     start_sequence = [1, 1, 1, 1, 1, 1, 1, 1] # Goes at beginning of data
     stop_sequence =  [0, 0, 0, 0, 0, 0, 0, 0] # Goes at end of data
 
-    V_vector = [1, 1] # TODO: Need to update once we have the SVD values
+    V_matrix = np.matrix([ [1, 0], [0, 1] ]) # TODO: Need to update once we have the SVD values
 
     # Make DataFormatter object
-    data_formatter1 = DataFormatter(data_path, 1, V_vector, amplitude,
+    data_formatter = DataFormatter(data_path, V_matrix, amplitude,
                 pulse, T, 10, start_sequence, stop_sequence)
-    data_formatter1.generate_data()
-    data_formatter1.format_data()
-    data_formatter1.visualize_data()
-
-
-    data_formatter2 = DataFormatter(data_path, 2, V_vector, amplitude,
-                pulse, T, 11, start_sequence, stop_sequence)
-    data_formatter2.generate_data()
-    data_formatter2.format_data()
-    data_formatter2.visualize_data()
-
+    data_formatter.generate_data()
+    data_formatter.format_data()
+    data_formatter.visualize_data()
     
