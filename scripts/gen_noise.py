@@ -5,8 +5,10 @@ if __name__ == "__main__":
     data_path = '../data/'
 
     np.random.seed(45)
-    noise1 = np.random.normal(scale=0.2, size=100000)
-    noise2 = np.random.normal(scale=0.2, size=100000)
+    #noise1 = np.random.normal(scale=0.2, size=100000)
+    #noise2 = np.random.normal(scale=0.2, size=100000)
+    noise1 = np.array(np.random.choice([0.5, -0.5], size=100000))
+    noise2 = np.array(np.random.choice([0.5, -0.5], size=100000))
 
     noise1.tofile(data_path + "noise_1.bin")
     noise2.tofile(data_path + "noise_2.bin")
