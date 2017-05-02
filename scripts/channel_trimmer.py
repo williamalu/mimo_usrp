@@ -31,9 +31,9 @@ class Trimmer(object):
             dtype=np.complex64)
         rec_length = range(len(received))
         rec_ampl = np.absolute(received)
-        noise_ampl = np.amax(rec_ampl[:500000])
+        noise_ampl = np.amax(rec_ampl[:200000])
 
-        beg1 = np.argmax(rec_ampl>2*noise_ampl)+offset
+        beg1 = np.argmax(rec_ampl>3*noise_ampl)+offset
         end1 = beg1 + noise_length
         beg2 = end1 + gap
         end2 = beg2 + noise_length
@@ -77,5 +77,5 @@ class Trimmer(object):
 
 
 if __name__ == "__main__":
-    Trimmer.trim_both("recnoise1", output_name="noise_h1", offset=10)
-    Trimmer.trim_both("recnoise2", offset=12, output_name="noise_h2")
+    Trimmer.trim_both("recnoise1", output_name="noise_h1", offset=19)
+    Trimmer.trim_both("recnoise2", output_name="noise_h2", offset=19)
