@@ -135,7 +135,7 @@ class Decoder(object):
 
     def apply_U(self):
         
-        # Multiply by respective V-vector value for MIMO
+        # Multiply by respective U-matrix value for MIMO
         for i in range(len(self.data_fixed_1)):
             data_vector = np.matrix([[self.data_fixed_1[i]],
                     [self.data_fixed_2[i]]])
