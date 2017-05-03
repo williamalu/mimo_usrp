@@ -24,15 +24,27 @@ if __name__ == "__main__":
     h22 = xcorr[np.argmax(np.absolute(xcorr))]
 
     # Print the channel estimate
-    print 'h11: {}'.format(h11)
-    print 'h12: {}'.format(h12)
-    print 'h21: {}'.format(h21)
-    print 'h22: {}'.format(h22)
-    print ''
+    print(h11)
+    print(h12)
+    print(h21)
+    print(h22)
+    #print('h11: {}').format(h11)
+    #print('h12: {}').format(h12)
+    #print('h21: {}').format(h21)
+    #print('h22: {}').format(h22)
+    print('')
 
     # SVD
     H_approx = np.matrix([[h11, h12],[h21, h22]])
+    np.save("../data/H_approx", H_approx)
+
     U, E, V_ = np.linalg.svd(H_approx)
-    print 'U:\n{}\n'.format(U)
-    print 'E:\n{}\n'.format(E)
-    print 'V_:\n{}\n'.format(V_)
+    np.save("../data/U_approx", U)
+    np.save("../data/E_approx", E)
+    np.save("../data/V*_approx", V_)
+    print("U: ", U)
+    print("E: ", E)
+    print("V_: ", V_)
+    #print('U:\n{}\n').format(U)
+    #print('E:\n{}\n').format(E)
+    #print('V_:\n{}\n').format(V_)

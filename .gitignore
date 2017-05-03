@@ -1,6 +1,7 @@
 .DS_Store
 *.swp
 grc/*.py
+*.npy
 
 *.bin
 data/*.txt
