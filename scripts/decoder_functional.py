@@ -86,13 +86,23 @@ def index_of_first_data(data, PLOT=True, title="Find First Data"):
     return beginning
 
 
-def extract_binary(data, start, end, T):
+def extract_binary(data, start, end, T, PLOT=True, title="Sample"):
     binary = []
-    for val in data[start:end:T]:
+    raw = []
+    offset = T//8
+    for val in data[(start+offset):(end+offset):T]:
         if val > 0:
             binary.append( 1 ) 
         else:
             binary.append( 0 )
+
+        raw.append(val)
+
+    indicies = range(start+offset, end+offset, T)
+    if PLOT:
+        plt.plot(data.real)
+        plt.plot(indicies, raw, '.', ms=10)
+        plt.show()
 
     return np.array(binary)
 
@@ -115,7 +125,6 @@ def compare_to_sent(received, sent):
     num_errors = np.count_nonzero( received - sent )
     print("Number of Errors: %d" % num_errors)
     print("Percent Error: %.2f%%" % (num_errors/len(sent) * 100) )
-    
 
 
 if __name__ == "__main__":
@@ -142,14 +151,17 @@ if __name__ == "__main__":
 
     ## Compare to actual values we sent
     start1 = index_of_first_data(data_1, PLOT=False)
-    end1 = len(data_1) - index_of_first_data(data_1[::-1], PLOT=False)
-    bin1 = extract_binary(data_1, start1, end1, 400)
-    bin1 = flip_data_if_needed(bin1)
-    compare_to_sent(bin1, true_data_1)
-
     start2 = index_of_first_data(data_2, PLOT=False)
-    end2 = len(data_2) - index_of_first_data(data_2[::-1], PLOT=False)
-    bin2 = extract_binary(data_2, start2, end2, 400)
-    bin2 = flip_data_if_needed(bin2)
-    compare_to_sent(bin2, true_data_2)
 
+    end1 = len(data_1) - index_of_first_data(data_1[::-1], PLOT=False)
+    end2 = len(data_2) - index_of_first_data(data_2[::-1], PLOT=False)
+
+    bin1 = extract_binary(data_1, start1, end1, 400, PLOT=False)
+    bin2 = extract_binary(data_2, start2, end2, 400, PLOT=False)
+
+    bin1 = flip_data_if_needed(bin1)
+    bin2 = flip_data_if_needed(bin2)
+
+    compare_to_sent(bin1, true_data_1)
+    compare_to_sent(bin2, true_data_2)
+    

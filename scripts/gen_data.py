@@ -28,7 +28,7 @@ class DataFormatter(object):
         self.transmit_data2 = None
 
 
-    def generate_data(self, data_length=20):
+    def generate_data(self, data_length=100):
         """ Generates random binary data with a specified length. """
         
         # Generate array of random binary
@@ -43,8 +43,8 @@ class DataFormatter(object):
         self.data2 = np.concatenate( [self.start_sequence, data2,
                 self.stop_sequence] )
 
-        np.savetxt(data_path + 'data_1.txt', self.data1)
-        np.savetxt(data_path + 'data_2.txt', self.data2)
+        np.save("../data/data_1", self.data1)
+        np.save("../data/data_2", self.data2)
         
 
     def format_data(self):
@@ -119,7 +119,8 @@ if __name__ == '__main__':
     start_sequence = [1, 1, 1, 1, 1, 1, 1, 1] # Goes at beginning of data
     stop_sequence =  [0, 0, 0, 0, 0, 0, 0, 0] # Goes at end of data
 
-    V_matrix = np.matrix([ [1, 0], [0, 1] ]) # TODO: Need to update once we have the SVD values
+    #V_matrix = np.matrix( "1, 0; 0, 1")
+    V_matrix = np.matrix(np.load("../data/V*_approx.npy")) # TODO: Need to update once we have the SVD values
 
     # Make DataFormatter object
     data_formatter = DataFormatter(data_path, V_matrix, amplitude,
