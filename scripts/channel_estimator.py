@@ -14,14 +14,28 @@ if __name__ == "__main__":
     noise_h22 = np.fromfile('../data/noise_h22.bin', dtype=np.complex64)
 
     # Estimate channels
-    xcorr = np.correlate(noise_h11, noise1, mode='full')
-    h11 = xcorr[np.argmax(np.absolute(xcorr))]
-    xcorr = np.correlate(noise_h12, noise2, mode='full')
-    h12 = xcorr[np.argmax(np.absolute(xcorr))]
-    xcorr = np.correlate(noise_h21, noise1, mode='full')
-    h21 = xcorr[np.argmax(np.absolute(xcorr))]
-    xcorr = np.correlate(noise_h22, noise2, mode='full')
-    h22 = xcorr[np.argmax(np.absolute(xcorr))]
+    xcorr11 = np.correlate(noise_h11, noise1, mode='full')
+    h11 = xcorr11[np.argmax(np.absolute(xcorr11))]
+
+    xcorr12 = np.correlate(noise_h12, noise2, mode='full')
+    h12 = xcorr12[np.argmax(np.absolute(xcorr12))]
+
+    xcorr21 = np.correlate(noise_h21, noise1, mode='full')
+    h21 = xcorr21[np.argmax(np.absolute(xcorr21))]
+
+    xcorr22 = np.correlate(noise_h22, noise2, mode='full')
+    h22 = xcorr22[np.argmax(np.absolute(xcorr22))]
+
+    # Plot estimator
+    plt.subplot(2, 2, 1)
+    plt.plot(xcorr11)
+    plt.subplot(2, 2, 2)
+    plt.plot(xcorr12)
+    plt.subplot(2, 2, 3)
+    plt.plot(xcorr21)
+    plt.subplot(2, 2, 4)
+    plt.plot(xcorr22)
+    plt.show()
 
     # Print the channel estimate
     print(h11)
