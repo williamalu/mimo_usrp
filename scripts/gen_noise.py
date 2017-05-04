@@ -36,8 +36,8 @@ if __name__ == "__main__":
     noise2 = np.array(np.random.choice([0.5, -0.5], size=noise_size))
 
     # Make noise into pulses
-    T = 50
-    pulse = np.ones(50)
+    T = 10
+    pulse = np.ones(10)
     noise1 = make_pulses(noise1, T, pulse)
     noise2 = make_pulses(noise2, T, pulse)
 
@@ -46,7 +46,7 @@ if __name__ == "__main__":
     noise2.tofile(data_path + "noise_2.bin")
 
     # Make filler so we can send everything at once
-    zeros_gap = np.zeros(60000)
+    zeros_gap = np.zeros(10000)
     zeros = np.zeros(len(noise1))
 
     # Data for channel 1
