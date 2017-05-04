@@ -1,6 +1,8 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
+import pll as PLL
+
 j = (0 + 1j)
 
 def apply_U(stream1, stream2, U, PLOT=True, title="Apply U.H"):
@@ -149,6 +151,22 @@ if __name__ == "__main__":
     # Apply offsets
     data_1 = apply_offsets(data_1, freq_off_1, phase_off_1, PLOT=False)
     data_2 = apply_offsets(data_2, freq_off_2, phase_off_2, PLOT=False)
+
+    # Apply PLL
+    data_1 = data_1 / np.std(data_1)
+    data_2 = data_2 / np.std(data_2)
+
+    kp = 0.3
+    ki = 0.05
+    kd = 0.0
+
+    pll = PLL.PLL(data_1, kp, ki, kd)
+    pll.correct_phase_offset()
+    data_1 *= np.exp( -pll.phase_list * j ) * j
+
+    pll = PLL.PLL(data_2, kp, ki, kd)
+    pll.correct_phase_offset()
+    data_2 *= np.exp( -pll.phase_list * j ) * j
 
     ## Compare to actual values we sent
     start1 = index_of_first_data(data_1, PLOT=False)
