@@ -183,7 +183,7 @@
     </param>
     <param>
       <key>repeat</key>
-      <value>True</value>
+      <value>False</value>
     </param>
     <param>
       <key>vlen</key>
@@ -238,7 +238,7 @@
     </param>
     <param>
       <key>repeat</key>
-      <value>True</value>
+      <value>False</value>
     </param>
     <param>
       <key>vlen</key>
@@ -285,7 +285,7 @@
     </param>
     <param>
       <key>value</key>
-      <value>100</value>
+      <value>75</value>
     </param>
   </block>
   <block>
@@ -1682,7 +1682,7 @@
     </param>
     <param>
       <key>_enabled</key>
-      <value>0</value>
+      <value>1</value>
     </param>
     <param>
       <key>_coordinate</key>
