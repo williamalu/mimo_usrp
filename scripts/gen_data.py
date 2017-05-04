@@ -120,7 +120,7 @@ if __name__ == '__main__':
     stop_sequence =  [0, 0, 0, 0, 0, 0, 0, 0] # Goes at end of data
 
     #V_matrix = np.matrix( "1, 0; 0, 1")
-    V_matrix = np.matrix(np.load("../data/V*_approx.npy")) # TODO: Need to update once we have the SVD values
+    V_matrix = np.matrix(np.load("../data/V_H_approx.npy")) # TODO: Need to update once we have the SVD values
 
     # Make DataFormatter object
     data_formatter = DataFormatter(data_path, V_matrix, amplitude,

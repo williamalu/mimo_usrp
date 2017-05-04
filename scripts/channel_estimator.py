@@ -133,7 +133,7 @@ if __name__ == "__main__":
     U, E, V_ = np.linalg.svd(H_approx)
     np.save("../data/U_approx", U)
     np.save("../data/E_approx", E)
-    np.save("../data/V*_approx", V_)
+    np.save("../data/V_H_approx", V_)
     print("U: ", U)
     print("E: ", E)
     print("V_: ", V_)
