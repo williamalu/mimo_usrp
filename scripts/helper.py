@@ -22,7 +22,7 @@ def wrap_radian(radian):
 if __name__ == "__main__":
 
     radian = 3 * np.pi
-    print wrap_radian(radian)
+    print(wrap_radian(radian))
 
     radian = -10 * np.pi
-    print wrap_radian(radian)
+    print(wrap_radian(radian))
