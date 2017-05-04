@@ -21,10 +21,10 @@ if __name__ == "__main__":
     f3, p3 = D.find_offsets_bpsk(noise_h21, PLOT=True)
     f4, p4 = D.find_offsets_bpsk(noise_h22, PLOT=True)
     
-    noise_h11 = D.apply_offsets(noise_h11, f1, 1, PLOT=False)
-    noise_h12 = D.apply_offsets(noise_h12, f2, 1, PLOT=False)
-    noise_h21 = D.apply_offsets(noise_h21, f3, 1, PLOT=False)
-    noise_h22 = D.apply_offsets(noise_h22, f4, 1, PLOT=False)
+    noise_h11 = D.apply_offsets(noise_h11, f1, 1, PLOT=True)
+    noise_h12 = D.apply_offsets(noise_h12, f2, 1, PLOT=True)
+    noise_h21 = D.apply_offsets(noise_h21, f3, 1, PLOT=True)
+    noise_h22 = D.apply_offsets(noise_h22, f4, 1, PLOT=True)
 
     noise_h11 = noise_h11 / np.std(noise_h11)
 
@@ -34,11 +34,19 @@ if __name__ == "__main__":
     pll = PLL.PLL(noise_h11, kp, ki, kd)
     pll.correct_phase_offset()
     pll.plot_data()
+    noise_h11 *= np.exp(-pll.phase_list *j) * j
+    noise_h21 *= np.exp(-pll.phase_list *j)
     
 
-    #plt.plot(noise_h11.real)
-    #plt.plot(noise_h11.imag)
-    #plt.show()
+    plt.figure()
+    plt.plot(noise_h11.real)
+    plt.plot(noise_h11.imag)
+    plt.title('h11 fixed with pll')
+    plt.figure()
+    plt.plot(noise_h21.real)
+    plt.plot(noise_h21.imag)
+    plt.title('h12 fixed with h11 phase')
+    plt.show()
 
     # Estimate channels
     xcorr11 = np.correlate(noise_h11, noise1, mode='full')
