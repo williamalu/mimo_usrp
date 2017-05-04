@@ -88,16 +88,16 @@ if __name__ == "__main__":
     '''
 
     # Estimate channels
-    xcorr11 = np.correlate(noise_h11, noise1, mode='full')
+    xcorr11 = np.correlate(noise_h11, noise1, mode='same')
     h11 = xcorr11[np.argmax(np.absolute(xcorr11))]
 
-    xcorr12 = np.correlate(noise_h12, noise2, mode='full')
+    xcorr12 = np.correlate(noise_h12, noise2, mode='same')
     h12 = xcorr12[np.argmax(np.absolute(xcorr12))]
 
-    xcorr21 = np.correlate(noise_h21, noise1, mode='full')
+    xcorr21 = np.correlate(noise_h21, noise1, mode='same')
     h21 = xcorr21[np.argmax(np.absolute(xcorr21))]
 
-    xcorr22 = np.correlate(noise_h22, noise2, mode='full')
+    xcorr22 = np.correlate(noise_h22, noise2, mode='same')
     h22 = xcorr22[np.argmax(np.absolute(xcorr22))]
 
     # Plot estimator
