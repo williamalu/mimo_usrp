@@ -2,6 +2,9 @@ import numpy as np
 import numpy as np
 import matplotlib.pyplot as plt
 
+import decoder_functional as D
+import pll as PLL
+
 j = (0 + 1j)
 
 if __name__ == "__main__":
@@ -12,6 +15,30 @@ if __name__ == "__main__":
     noise_h12 = np.fromfile('../data/noise_h12.bin', dtype=np.complex64)
     noise_h21 = np.fromfile('../data/noise_h21.bin', dtype=np.complex64)
     noise_h22 = np.fromfile('../data/noise_h22.bin', dtype=np.complex64)
+
+    f1, p1 = D.find_offsets_bpsk(noise_h11, PLOT=True)
+    f2, p2 = D.find_offsets_bpsk(noise_h12, PLOT=True)
+    f3, p3 = D.find_offsets_bpsk(noise_h21, PLOT=True)
+    f4, p4 = D.find_offsets_bpsk(noise_h22, PLOT=True)
+    
+    noise_h11 = D.apply_offsets(noise_h11, f1, 1, PLOT=False)
+    noise_h12 = D.apply_offsets(noise_h12, f2, 1, PLOT=False)
+    noise_h21 = D.apply_offsets(noise_h21, f3, 1, PLOT=False)
+    noise_h22 = D.apply_offsets(noise_h22, f4, 1, PLOT=False)
+
+    noise_h11 = noise_h11 / np.std(noise_h11)
+
+    kp = 0.3
+    ki = 0.05
+    kd = 0.0
+    pll = PLL.PLL(noise_h11, kp, ki, kd)
+    pll.correct_phase_offset()
+    pll.plot_data()
+    
+
+    #plt.plot(noise_h11.real)
+    #plt.plot(noise_h11.imag)
+    #plt.show()
 
     # Estimate channels
     xcorr11 = np.correlate(noise_h11, noise1, mode='full')

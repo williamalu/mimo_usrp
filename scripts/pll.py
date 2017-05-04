@@ -9,7 +9,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 import helper
-from decoder import Decoder
+#from decoder import Decoder
 
 
 j = (0 + 1j)
@@ -45,11 +45,11 @@ class PLL(object):
         for x in self.data:
 
             # Multiply input value by complex exponential of specified phase
-            y = x * np.exp(phase * j)
+            y = x * np.exp(-phase * j)
             self.data_fixed = np.append(self.data_fixed, y)
 
             # Estimate error in phase for BPSK
-            err = -y.real * y.imag if (np.absolute(x) > .004) else 0.0
+            err = -y.real * y.imag #if (np.absolute(x) > .004) else 0.0
 
             # Estimate error in phase for QPSK
             # A = y.real * np.sign(y.imag)
@@ -110,12 +110,14 @@ class PLL(object):
 
 if __name__ == "__main__":
 
+    '''
     data_path = '../data/'
     input_filename = 'received_data_1.bin'
     decoder = Decoder(data_path, input_filename)
     decoder.read_file()
     decoder.find_offsets_bpsk()
     decoder.fix_offsets()
+    '''
 
     k_p = 0.7
     k_i = 0.1

@@ -101,6 +101,7 @@ def extract_binary(data, start, end, T, PLOT=True, title="Sample"):
     indicies = range(start+offset, end+offset, T)
     if PLOT:
         plt.plot(data.real)
+        plt.plot(data.imag)
         plt.plot(indicies, raw, '.', ms=10)
         plt.show()
 
@@ -142,8 +143,8 @@ if __name__ == "__main__":
     data_1, data_2 = apply_U(raw_data_1, raw_data_2, U, PLOT=False)
 
     # Correct for frequency & phase offset
-    freq_off_1, phase_off_1 = find_offsets_bpsk(data_1, PLOT=False)
-    freq_off_2, phase_off_2 = find_offsets_bpsk(data_2, PLOT=False)
+    freq_off_1, phase_off_1 = find_offsets_bpsk(data_1, PLOT=True)
+    freq_off_2, phase_off_2 = find_offsets_bpsk(data_2, PLOT=True)
 
     # Apply offsets
     data_1 = apply_offsets(data_1, freq_off_1, phase_off_1, PLOT=False)
@@ -156,8 +157,8 @@ if __name__ == "__main__":
     end1 = len(data_1) - index_of_first_data(data_1[::-1], PLOT=False)
     end2 = len(data_2) - index_of_first_data(data_2[::-1], PLOT=False)
 
-    bin1 = extract_binary(data_1, start1, end1, 400, PLOT=False)
-    bin2 = extract_binary(data_2, start2, end2, 400, PLOT=False)
+    bin1 = extract_binary(data_1, start1, end1, 400, PLOT=True)
+    bin2 = extract_binary(data_2, start2, end2, 400, PLOT=True)
 
     bin1 = flip_data_if_needed(bin1)
     bin2 = flip_data_if_needed(bin2)
