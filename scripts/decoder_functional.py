@@ -175,6 +175,9 @@ if __name__ == "__main__":
     end1 = len(data_1) - index_of_first_data(data_1[::-1], PLOT=False)
     end2 = len(data_2) - index_of_first_data(data_2[::-1], PLOT=False)
 
+    start1, start2 = 0, 0
+    end1, end2 = len(data_1), len(data_2)
+
     bin1 = extract_binary(data_1, start1, end1, 400, PLOT=True)
     bin2 = extract_binary(data_2, start2, end2, 400, PLOT=True)
 
