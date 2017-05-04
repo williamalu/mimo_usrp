@@ -20,7 +20,7 @@ if __name__ == "__main__":
             end = len(received1) - i
             break
 
-    buffer_len = (end - beginning)//2
+    buffer_len = 0 #(end - beginning)//2
     received1_trimmed = received1[beginning-buffer_len : end+buffer_len]
     received2_trimmed = received2[beginning-buffer_len : end+buffer_len]
 
