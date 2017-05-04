@@ -2,7 +2,7 @@ import numpy as np
 import numpy as np
 import matplotlib.pyplot as plt
 
-import decoder_functional as D
+import decoder as D
 import pll as PLL
 
 j = (0 + 1j)
