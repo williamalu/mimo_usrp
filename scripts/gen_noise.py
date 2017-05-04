@@ -8,7 +8,7 @@ def make_pulses(data, T, pulse):
         if idx % T == 0:
             widen[idx] = data[ idx//T ]
 
-    return np.convolve(widen, pulse, 'full')
+    return np.array(np.convolve(widen, pulse, 'full'), dtype=np.complex64)
 
 def raised_cosine(size, T):
     W = 1/T

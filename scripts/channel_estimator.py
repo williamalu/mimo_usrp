@@ -9,8 +9,11 @@ j = (0 + 1j)
 
 if __name__ == "__main__":
     # Load data files
-    noise1 = np.fromfile('../data/noise_1.bin')
-    noise2 = np.fromfile('../data/noise_2.bin') 
+    noise1 = np.fromfile('../data/noise_1.bin', dtype=np.complex64)
+    noise2 = np.fromfile('../data/noise_2.bin', dtype=np.complex64) 
+    plt.plot(noise2)
+    plt.show()
+
     noise_h11 = np.fromfile('../data/noise_h11.bin', dtype=np.complex64)
     noise_h12 = np.fromfile('../data/noise_h12.bin', dtype=np.complex64)
     noise_h21 = np.fromfile('../data/noise_h21.bin', dtype=np.complex64)
@@ -18,35 +21,71 @@ if __name__ == "__main__":
 
     f1, p1 = D.find_offsets_bpsk(noise_h11, PLOT=True)
     f2, p2 = D.find_offsets_bpsk(noise_h12, PLOT=True)
-    f3, p3 = D.find_offsets_bpsk(noise_h21, PLOT=True)
-    f4, p4 = D.find_offsets_bpsk(noise_h22, PLOT=True)
+    #f3, p3 = D.find_offsets_bpsk(noise_h21, PLOT=True)
+    #f4, p4 = D.find_offsets_bpsk(noise_h22, PLOT=True)
     
-    noise_h11 = D.apply_offsets(noise_h11, f1, 1, PLOT=True)
-    noise_h12 = D.apply_offsets(noise_h12, f2, 1, PLOT=True)
-    noise_h21 = D.apply_offsets(noise_h21, f3, 1, PLOT=True)
-    noise_h22 = D.apply_offsets(noise_h22, f4, 1, PLOT=True)
+    noise_h11 = D.apply_offsets(noise_h11, f1, 1, PLOT=False)
+    noise_h12 = D.apply_offsets(noise_h12, f2, 1, PLOT=False)
+    noise_h21 = D.apply_offsets(noise_h21, f1, 1, PLOT=False)
+    noise_h22 = D.apply_offsets(noise_h22, f2, 1, PLOT=False)
 
+    # PLL for H11 and H21
     noise_h11 = noise_h11 / np.std(noise_h11)
-
     kp = 0.3
     ki = 0.05
     kd = 0.0
     pll = PLL.PLL(noise_h11, kp, ki, kd)
     pll.correct_phase_offset()
-    pll.plot_data()
+    #pll.plot_data()
     noise_h11 *= np.exp(-pll.phase_list *j) * j
-    noise_h21 *= np.exp(-pll.phase_list *j)
-    
+    noise_h21 *= np.exp(-pll.phase_list *j) * j
 
+    # PLL for H12 and H22
+    noise_h12 = noise_h12 / np.std(noise_h12)
+    kp = 0.3
+    ki = 0.05
+    kd = 0.0
+    pll = PLL.PLL(noise_h12, kp, ki, kd)
+    pll.correct_phase_offset()
+    #pll.plot_data()
+    noise_h12 *= np.exp(-pll.phase_list *j) * j
+    noise_h22 *= np.exp(-pll.phase_list *j) * j
+
+    plt.figure()
+
+    plt.subplot(2, 2, 1)
+    plt.title("H11")
+    plt.plot(noise_h11.real)
+    plt.plot(noise_h11.imag)
+
+    plt.subplot(2, 2, 2)
+    plt.title("H12")
+    plt.plot(noise_h12.real)
+    plt.plot(noise_h12.imag)
+
+    plt.subplot(2, 2, 3)
+    plt.title("H21")
+    plt.plot(noise_h21.real)
+    plt.plot(noise_h21.imag)
+
+    plt.subplot(2, 2, 4)
+    plt.title("H22")
+    plt.plot(noise_h22.real)
+    plt.plot(noise_h22.imag)
+    plt.show()
+    
+    '''
     plt.figure()
     plt.plot(noise_h11.real)
     plt.plot(noise_h11.imag)
     plt.title('h11 fixed with pll')
     plt.figure()
-    plt.plot(noise_h21.real)
-    plt.plot(noise_h21.imag)
-    plt.title('h12 fixed with h11 phase')
+
+    #plt.plot(noise_h21.real)
+    #plt.plot(noise_h21.imag)
+    #plt.title('h12 fixed with h11 phase')
     plt.show()
+    '''
 
     # Estimate channels
     xcorr11 = np.correlate(noise_h11, noise1, mode='full')
@@ -64,12 +103,16 @@ if __name__ == "__main__":
     # Plot estimator
     plt.subplot(2, 2, 1)
     plt.plot(xcorr11)
+    plt.title("H11")
     plt.subplot(2, 2, 2)
     plt.plot(xcorr12)
+    plt.title("H12")
     plt.subplot(2, 2, 3)
     plt.plot(xcorr21)
+    plt.title("H21")
     plt.subplot(2, 2, 4)
     plt.plot(xcorr22)
+    plt.title("H22")
     plt.show()
 
     # Print the channel estimate
