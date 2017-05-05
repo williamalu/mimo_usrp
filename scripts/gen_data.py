@@ -6,6 +6,7 @@ specified and writes it to a new file. """
 
 
 import numpy as np
+import gen_noise as GN
 
 
 class DataFormatter(object):
@@ -114,8 +115,9 @@ if __name__ == '__main__':
     # Define parameters for data formatting
     data_path = '../data/'
     amplitude = 0.5 # Voltage scaling
-    pulse = np.ones(100) # TODO: Change to a raised cosine
-    T = 400
+    #pulse = np.ones(100) # TODO: Change to a raised cosine
+    T = 10
+    pulse = GN.raised_cosine(40, T)
     start_sequence = [1, 1, 1, 1, 1, 1, 1, 1] # Goes at beginning of data
     stop_sequence =  [0, 0, 0, 0, 0, 0, 0, 0] # Goes at end of data
 

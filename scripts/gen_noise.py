@@ -12,17 +12,16 @@ def make_pulses(data, T, pulse):
 
 def raised_cosine(size, T):
     W = 1/T
-    pulse = np.zeros(size, dtype=np.complex64)
-    alpha = 0.5
+    pulse = np.zeros(2*size, dtype=np.complex64)
+    alpha = 0.7
     
-    for idx, t in enumerate(range(-size//T, size//T)):
-        val = np.sinc(2*W*t) * ( np.cos( 2*np.pi*alpha*W*t )/( 1 - 16 * (alpha**2) * (W**2) * (t**2)) )
-        pulse[idx] = t
+    for idx, t in enumerate(range(-size, size)):
+        t = t/2
+        sinc = np.sinc(2*W*t)
+        cos = np.cos( 2*np.pi*alpha*W*t )
+        divisor =  1 - 16 * (alpha**2) * (W**2) * (t**2)
+        pulse[idx] = sinc*cos/divisor
 
-    plt.plot(pulse)
-    plt.show()
-    exit()
-    
     return pulse
 
 
@@ -31,15 +30,16 @@ if __name__ == "__main__":
 
     # Gen noise
     np.random.seed(45)
-    noise_size = 10000
+    noise_size = 5000
     noise1 = np.array(np.random.choice([0.5, -0.5], size=noise_size))
     noise2 = np.array(np.random.choice([0.5, -0.5], size=noise_size))
 
     # Make noise into pulses
     T = 10
-    pulse = np.ones(10)
-    noise1 = make_pulses(noise1, T, pulse)
-    noise2 = make_pulses(noise2, T, pulse)
+    raised_cos = raised_cosine(40, T)
+    #pulse = np.ones(10)
+    noise1 = make_pulses(noise1, T, raised_cos)
+    noise2 = make_pulses(noise2, T, raised_cos)
 
     # Save noise for cross correlation later
     noise1.tofile(data_path + "noise_1.bin")
