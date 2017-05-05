@@ -88,11 +88,11 @@ def index_of_first_data(data, PLOT=True, title="Find First Data"):
     return beginning
 
 
-def extract_binary(data, start, data, T, PLOT=True, title="Sample"):
+def extract_binary(data, start, data_count, T, PLOT=True, title="Sample", subplot=1):
     binary = []
     raw = []
-    offset = T//4
-    for val in data[(start+offset):(start + data*T):T]:
+    offset = 100 #T//8
+    for val in data[(start+offset):(start + data_count*T):T]:
         if val > 0:
             binary.append( 1 ) 
         else:
@@ -100,12 +100,14 @@ def extract_binary(data, start, data, T, PLOT=True, title="Sample"):
 
         raw.append(val)
 
-    indicies = range(start+offset, end+offset, T)
+    indicies = range(start+offset, start + data_count*T, T)
     if PLOT:
+        plt.subplot(2, 1, subplot)
+        plt.title(title)
         plt.plot(data.real)
         plt.plot(data.imag)
         plt.plot(indicies, raw, '.', ms=10)
-        plt.show()
+        #plt.show()
 
     return np.array(binary)
 
@@ -153,12 +155,11 @@ if __name__ == "__main__":
     data_2 = apply_offsets(data_2, freq_off_2, phase_off_2, PLOT=False)
 
     # Apply PLL
-    '''
     data_1 = data_1 / np.std(data_1)
     data_2 = data_2 / np.std(data_2)
 
-    kp = 0.01
-    ki = 0.003
+    kp = 0.1
+    ki = 0.05
     kd = 0.0
 
     pll = PLL.PLL(data_1, kp, ki, kd)
@@ -168,7 +169,6 @@ if __name__ == "__main__":
     pll = PLL.PLL(data_2, kp, ki, kd)
     pll.correct_phase_offset()
     data_2 *= np.exp( -pll.phase_list * j ) * j
-    '''
 
     ## Compare to actual values we sent
     start1 = index_of_first_data(data_1, PLOT=False)
@@ -180,12 +180,12 @@ if __name__ == "__main__":
    # start1, start2 = 0, 0
    # end1, end2 = len(data_1), len(data_2)
 
-    bin1 = extract_binary(data_1, start1, end1, 400, PLOT=True)
-    bin2 = extract_binary(data_2, start2, end2, 400, PLOT=True)
+    bin1 = extract_binary(data_1, start1, 116, 200, PLOT=True, title="Data Extracted 1", subplot=1)
+    bin2 = extract_binary(data_2, start2, 116, 200, PLOT=True, title="Data Extracted 2", subplot=2)
+    plt.show()
 
     bin1 = flip_data_if_needed(bin1)
     bin2 = flip_data_if_needed(bin2)
 
     compare_to_sent(bin1, true_data_1)
     compare_to_sent(bin2, true_data_2)
-    

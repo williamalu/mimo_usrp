@@ -52,22 +52,22 @@ if __name__ == "__main__":
     plt.figure()
 
     plt.subplot(2, 2, 1)
-    plt.title("H11")
+    plt.title("Noise 11")
     plt.plot(noise_h11.real)
     plt.plot(noise_h11.imag)
 
     plt.subplot(2, 2, 2)
-    plt.title("H12")
+    plt.title("Noise 12")
     plt.plot(noise_h12.real)
     plt.plot(noise_h12.imag)
 
     plt.subplot(2, 2, 3)
-    plt.title("H21")
+    plt.title("Noise 21")
     plt.plot(noise_h21.real)
     plt.plot(noise_h21.imag)
 
     plt.subplot(2, 2, 4)
-    plt.title("H22")
+    plt.title("Noise 22")
     plt.plot(noise_h22.real)
     plt.plot(noise_h22.imag)
     plt.show()

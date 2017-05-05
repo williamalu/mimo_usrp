@@ -44,8 +44,8 @@ class DataFormatter(object):
         self.data2 = np.concatenate( [self.start_sequence, data2,
                 self.stop_sequence] )
 
-        np.save("../data/data_1", self.data1)
-        np.save("../data/data_2", self.data2)
+        #np.save("../data/data_1", self.data1)
+        #np.save("../data/data_2", self.data2)
         
 
     def format_data(self):
@@ -92,16 +92,20 @@ class DataFormatter(object):
         # Write formatted_data to output_file
         self.transmit_data1.tofile(self.data_path + 'send_1.bin')
         self.transmit_data2.tofile(self.data_path + 'send_2.bin')
+        #self.transmit_data1=np.fromfile(self.data_path + 'send_1.bin', dtype=np.complex64)
+        #self.transmit_data2=np.fromfile(self.data_path + 'send_2.bin', dtype=np.complex64)
 
 
     def visualize_data(self):
         import matplotlib.pyplot as plt
+
+        plt.subplot(2, 1, 1)
         plt.plot(self.transmit_data1.real, label="Real")
         plt.plot(self.transmit_data1.imag, label="Imaginary")
         plt.legend()
         plt.title("data 1")
 
-        plt.figure()
+        plt.subplot(2, 1, 2)
         plt.plot(self.transmit_data2.real, label="Real")
         plt.plot(self.transmit_data2.imag, label="Imaginary")
         plt.legend()
@@ -116,8 +120,8 @@ if __name__ == '__main__':
     data_path = '../data/'
     amplitude = 0.5 # Voltage scaling
     pulse = np.ones(100) # TODO: Change to a raised cosine
-    T = 400
-    #pulse = GN.raised_cosine(400, T)
+    T = 200
+    pulse = GN.raised_cosine(400, T)
     start_sequence = [1, 1, 1, 1, 1, 1, 1, 1] # Goes at beginning of data
     stop_sequence =  [0, 0, 0, 0, 0, 0, 0, 0] # Goes at end of data
 
