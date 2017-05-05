@@ -11,8 +11,6 @@ if __name__ == "__main__":
     # Load data files
     noise1 = np.fromfile('../data/noise_1.bin', dtype=np.complex64)
     noise2 = np.fromfile('../data/noise_2.bin', dtype=np.complex64) 
-    plt.plot(noise2)
-    plt.show()
 
     noise_h11 = np.fromfile('../data/noise_h11.bin', dtype=np.complex64)
     noise_h12 = np.fromfile('../data/noise_h12.bin', dtype=np.complex64)
@@ -30,26 +28,26 @@ if __name__ == "__main__":
     noise_h22 = D.apply_offsets(noise_h22, f2, 1, PLOT=False)
 
     # PLL for H11 and H21
-    noise_h11 = noise_h11 / np.std(noise_h11)
-    kp = 0.3
-    ki = 0.05
-    kd = 0.0
-    pll = PLL.PLL(noise_h11, kp, ki, kd)
-    pll.correct_phase_offset()
-    #pll.plot_data()
-    noise_h11 *= np.exp(-pll.phase_list *j) * j
-    noise_h21 *= np.exp(-pll.phase_list *j) * j
+    # noise_h11 = noise_h11 / np.std(noise_h11)
+    # kp = 0.3
+    # ki = 0.05
+    # kd = 0.0
+    # pll = PLL.PLL(noise_h11, kp, ki, kd)
+    # pll.correct_phase_offset()
+    # #pll.plot_data()
+    # noise_h11 *= np.exp(-pll.phase_list *j) * j
+    # noise_h21 *= np.exp(-pll.phase_list *j) * j
 
-    # PLL for H12 and H22
-    noise_h12 = noise_h12 / np.std(noise_h12)
-    kp = 0.3
-    ki = 0.05
-    kd = 0.0
-    pll = PLL.PLL(noise_h12, kp, ki, kd)
-    pll.correct_phase_offset()
-    #pll.plot_data()
-    noise_h12 *= np.exp(-pll.phase_list *j) * j
-    noise_h22 *= np.exp(-pll.phase_list *j) * j
+    # # PLL for H12 and H22
+    # noise_h12 = noise_h12 / np.std(noise_h12)
+    # kp = 0.3
+    # ki = 0.05
+    # kd = 0.0
+    # pll = PLL.PLL(noise_h12, kp, ki, kd)
+    # pll.correct_phase_offset()
+    # #pll.plot_data()
+    # noise_h12 *= np.exp(-pll.phase_list *j) * j
+    # noise_h22 *= np.exp(-pll.phase_list *j) * j
 
     plt.figure()
 
