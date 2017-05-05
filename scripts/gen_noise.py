@@ -11,16 +11,16 @@ def make_pulses(data, T, pulse):
     return np.array(np.convolve(widen, pulse, 'full'), dtype=np.complex64)
 
 def raised_cosine(size, T):
-    W = 1/T
+    W = 1/float(T)
     pulse = np.zeros(2*size, dtype=np.complex64)
     alpha = 0.7
     
     for idx, t in enumerate(range(-size, size)):
-        t = t/2
+        t = t/2.
         sinc = np.sinc(2*W*t)
         cos = np.cos( 2*np.pi*alpha*W*t )
         divisor =  1 - 16 * (alpha**2) * (W**2) * (t**2)
-        pulse[idx] = sinc*cos/divisor
+        pulse[idx] = sinc*cos/float(divisor)
 
     return pulse
 
