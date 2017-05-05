@@ -115,9 +115,9 @@ if __name__ == '__main__':
     # Define parameters for data formatting
     data_path = '../data/'
     amplitude = 0.5 # Voltage scaling
-    pulse = np.ones(100) # TODO: Change to a raised cosine
+    #pulse = np.ones(100) # TODO: Change to a raised cosine
     T = 200
-    #pulse = GN.raised_cosine(400, T)
+    pulse = GN.raised_cosine(400, T)
     start_sequence = [1, 1, 1, 1, 1, 1, 1, 1] # Goes at beginning of data
     stop_sequence =  [0, 0, 0, 0, 0, 0, 0, 0] # Goes at end of data
 
