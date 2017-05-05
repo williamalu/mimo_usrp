@@ -31,9 +31,8 @@ if __name__ == "__main__":
 
     # Gen noise
     np.random.seed(45)
-    noise_size = 10000
-    noise1 = np.array(np.random.choice([0.5, -0.5], size=noise_size))
-    noise2 = np.array(np.random.choice([0.5, -0.5], size=noise_size))
+    noise1 = np.array(np.random.choice([0.5, -0.5], size=20000))
+    noise2 = np.array(np.random.choice([0.05, -0.05], size=10000))
 
     # Make noise into pulses
     T = 10
@@ -47,11 +46,11 @@ if __name__ == "__main__":
 
     # Make filler so we can send everything at once
     zeros_gap = np.zeros(10000)
-    zeros = np.zeros(len(noise1))
+    zeros = np.zeros(len(noise2)-9)
 
     # Data for channel 1
-    channel1 = np.concatenate( [noise1, zeros_gap, zeros] )
-    channel2 = np.concatenate( [zeros, zeros_gap, noise2] )
+    channel1 = np.concatenate( [noise1] )
+    channel2 = np.concatenate( [zeros, noise2] )
 
     channel1 = np.array( channel1, dtype=np.complex64 )
     channel2 = np.array( channel2, dtype=np.complex64 )
@@ -64,3 +63,16 @@ if __name__ == "__main__":
     plt.plot(channel1)
     plt.plot(channel2)
     plt.show()
+
+    # sum them
+    '''
+    channel12 = channel1 + channel2
+    xcorr1 = np.correlate(channel12, channel1, mode='full' )
+    xcorr2 = np.correlate(channel12[(10000*T):], channel2, mode='full' )
+    
+    plt.subplot(2, 1, 1)
+    plt.plot(xcorr1)
+    plt.subplot(2, 1, 2)
+    plt.plot(xcorr2)
+    plt.show()
+    '''
