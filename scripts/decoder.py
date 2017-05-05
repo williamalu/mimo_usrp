@@ -153,6 +153,7 @@ if __name__ == "__main__":
     data_2 = apply_offsets(data_2, freq_off_2, phase_off_2, PLOT=False)
 
     # Apply PLL
+    '''
     data_1 = data_1 / np.std(data_1)
     data_2 = data_2 / np.std(data_2)
 
@@ -167,6 +168,7 @@ if __name__ == "__main__":
     pll = PLL.PLL(data_2, kp, ki, kd)
     pll.correct_phase_offset()
     data_2 *= np.exp( -pll.phase_list * j ) * j
+    '''
 
     ## Compare to actual values we sent
     start1 = index_of_first_data(data_1, PLOT=False)
