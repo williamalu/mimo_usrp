@@ -6,6 +6,14 @@ if __name__ == "__main__":
     received1 = np.fromfile("../data/received_1.bin", dtype=np.complex64)
     received2 = np.fromfile("../data/received_2.bin", dtype=np.complex64)
 
+    plt.subplot(2, 1, 1)
+    plt.plot(received1.real)
+    plt.plot(received1.imag)
+    plt.subplot(2, 1, 2)
+    plt.plot(received2.real)
+    plt.plot(received2.imag)
+    plt.show()
+
     max_compare = np.max(received1)
 
     beginning = 0
@@ -20,7 +28,7 @@ if __name__ == "__main__":
             end = len(received1) - i
             break
 
-    buffer_len = 0 #(end - beginning)//2
+    buffer_len = (end - beginning)//2
     received1_trimmed = received1[beginning-buffer_len : end+buffer_len]
     received2_trimmed = received2[beginning-buffer_len : end+buffer_len]
 
