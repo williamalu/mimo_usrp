@@ -88,11 +88,11 @@ def index_of_first_data(data, PLOT=True, title="Find First Data"):
     return beginning
 
 
-def extract_binary(data, start, end, T, PLOT=True, title="Sample"):
+def extract_binary(data, start, data, T, PLOT=True, title="Sample"):
     binary = []
     raw = []
-    offset = T//8
-    for val in data[(start+offset):(end+offset):T]:
+    offset = T//4
+    for val in data[(start+offset):(start + data*T):T]:
         if val > 0:
             binary.append( 1 ) 
         else:
@@ -153,11 +153,12 @@ if __name__ == "__main__":
     data_2 = apply_offsets(data_2, freq_off_2, phase_off_2, PLOT=False)
 
     # Apply PLL
+    '''
     data_1 = data_1 / np.std(data_1)
     data_2 = data_2 / np.std(data_2)
 
-    kp = 0.3
-    ki = 0.05
+    kp = 0.01
+    ki = 0.003
     kd = 0.0
 
     pll = PLL.PLL(data_1, kp, ki, kd)
@@ -167,6 +168,7 @@ if __name__ == "__main__":
     pll = PLL.PLL(data_2, kp, ki, kd)
     pll.correct_phase_offset()
     data_2 *= np.exp( -pll.phase_list * j ) * j
+    '''
 
     ## Compare to actual values we sent
     start1 = index_of_first_data(data_1, PLOT=False)
@@ -175,11 +177,11 @@ if __name__ == "__main__":
     end1 = len(data_1) - index_of_first_data(data_1[::-1], PLOT=False)
     end2 = len(data_2) - index_of_first_data(data_2[::-1], PLOT=False)
 
-    start1, start2 = 0, 0
-    end1, end2 = len(data_1), len(data_2)
+   # start1, start2 = 0, 0
+   # end1, end2 = len(data_1), len(data_2)
 
-    bin1 = extract_binary(data_1, start1, end1, 200, PLOT=True)
-    bin2 = extract_binary(data_2, start2, end2, 200, PLOT=True)
+    bin1 = extract_binary(data_1, start1, end1, 400, PLOT=True)
+    bin2 = extract_binary(data_2, start2, end2, 400, PLOT=True)
 
     bin1 = flip_data_if_needed(bin1)
     bin2 = flip_data_if_needed(bin2)

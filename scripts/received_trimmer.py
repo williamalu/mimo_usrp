@@ -12,17 +12,17 @@ if __name__ == "__main__":
 
     beginning = 0
     for i, val in enumerate(np.absolute(received1)):
-        if np.absolute(val) >= max_compare/4:
+        if np.absolute(val) >= max_compare/8:
             beginning = i
             break
 
     end = 0
     for i, val in enumerate(np.absolute(received1[::-1])):
-        if np.absolute(val) >= max_compare/4:
+        if np.absolute(val) >= max_compare/8:
             end = len(received1) - i
             break
 
-    buffer_len = 0 #(end - beginning)//2
+    buffer_len = (end - beginning)//4
     received1_trimmed = received1[beginning-buffer_len : end+buffer_len]
     received2_trimmed = received2[beginning-buffer_len : end+buffer_len]
 
