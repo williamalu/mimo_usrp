@@ -21,14 +21,15 @@ if __name__ == "__main__":
 
     f1, p1 = D.find_offsets_bpsk(noise_h11, PLOT=True)
     f2, p2 = D.find_offsets_bpsk(noise_h12, PLOT=True)
-    #f3, p3 = D.find_offsets_bpsk(noise_h21, PLOT=True)
-    #f4, p4 = D.find_offsets_bpsk(noise_h22, PLOT=True)
+    f3, p3 = D.find_offsets_bpsk(noise_h21, PLOT=True)
+    f4, p4 = D.find_offsets_bpsk(noise_h22, PLOT=True)
     
     noise_h11 = D.apply_offsets(noise_h11, f1, 1, PLOT=False)
     noise_h12 = D.apply_offsets(noise_h12, f2, 1, PLOT=False)
-    noise_h21 = D.apply_offsets(noise_h21, f1, 1, PLOT=False)
-    noise_h22 = D.apply_offsets(noise_h22, f2, 1, PLOT=False)
+    noise_h21 = D.apply_offsets(noise_h21, f3, 1, PLOT=False)
+    noise_h22 = D.apply_offsets(noise_h22, f4, 1, PLOT=False)
 
+    '''
     # PLL for H11 and H21
     noise_h11 = noise_h11 / np.std(noise_h11)
     kp = 0.3
@@ -50,6 +51,7 @@ if __name__ == "__main__":
     #pll.plot_data()
     noise_h12 *= np.exp(-pll.phase_list *j) * j
     noise_h22 *= np.exp(-pll.phase_list *j) * j
+    '''
 
     plt.figure()
 
