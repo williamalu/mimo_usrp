@@ -11,7 +11,7 @@ class Trimmer(object):
     data_path = "../data/"
 
     @staticmethod
-    def trim_both(fname, output_name, noise_length=100000, gap=10000, offset=10):
+    def trim_both(fname, output_name, noise_length=50000, gap=10000, offset=10):
         """ Writes two files that each contain one of the two trimmed blocks
             of received noise
 
@@ -31,12 +31,14 @@ class Trimmer(object):
             dtype=np.complex64)
         rec_length = range(len(received))
         rec_ampl = np.absolute(received)
-        noise_ampl = np.amax(rec_ampl[:200000])
+        noise_ampl = np.amax(rec_ampl[:100000])
 
         beg1 = np.argmax(rec_ampl>3*noise_ampl)+offset
         end1 = beg1 + noise_length
         beg2 = end1 + gap
         end2 = beg2 + noise_length
+
+        # plt.plot(rec_ampl)
 
         plt.subplot(2,1,1)
         plt.plot(rec_length[beg1-gap:end1+gap], rec_ampl[beg1-gap:end1+gap],

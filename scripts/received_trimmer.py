@@ -5,6 +5,8 @@ import matplotlib.pyplot as plt
 if __name__ == "__main__":
     received1 = np.fromfile("../data/received_1.bin", dtype=np.complex64)
     received2 = np.fromfile("../data/received_2.bin", dtype=np.complex64)
+    plt.plot(np.abs(received2))
+    plt.show()
 
     max_compare = np.max(received1)
 
