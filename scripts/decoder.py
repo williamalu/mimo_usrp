@@ -145,8 +145,8 @@ if __name__ == "__main__":
     data_1, data_2 = apply_U(raw_data_1, raw_data_2, U, PLOT=False)
 
     # Correct for frequency & phase offset
-    freq_off_1, phase_off_1 = find_offsets_bpsk(data_1, PLOT=True)
-    freq_off_2, phase_off_2 = find_offsets_bpsk(data_2, PLOT=True)
+    freq_off_1, phase_off_1 = find_offsets_bpsk(data_1, PLOT=False)
+    freq_off_2, phase_off_2 = find_offsets_bpsk(data_2, PLOT=False)
 
     # Apply offsets
     data_1 = apply_offsets(data_1, freq_off_1, phase_off_1, PLOT=False)
@@ -178,8 +178,8 @@ if __name__ == "__main__":
     start1, start2 = 0, 0
     end1, end2 = len(data_1), len(data_2)
 
-    bin1 = extract_binary(data_1, start1, end1, 400, PLOT=True)
-    bin2 = extract_binary(data_2, start2, end2, 400, PLOT=True)
+    bin1 = extract_binary(data_1, start1, end1, 200, PLOT=True)
+    bin2 = extract_binary(data_2, start2, end2, 200, PLOT=True)
 
     bin1 = flip_data_if_needed(bin1)
     bin2 = flip_data_if_needed(bin2)
